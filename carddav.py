@@ -41,7 +41,7 @@ contains the class PyCardDAV and some associated functions and definitions
 from collections import namedtuple
 import requests
 import sys
-import urlparse
+import urllib.parse
 import logging
 import lxml.etree as ET
 import string
@@ -49,14 +49,14 @@ import string
 def raise_for_status( resp ):
     if 400 <= resp.status_code < 500 or 500 <= resp.status_code < 600:
         msg  = 'Error code: ' + str(resp.status_code) + '\n'
-        msg += resp.content
+        msg += resp.text
         raise requests.exceptions.HTTPError( msg )
 
 def get_random_href():
     """returns a random href"""
     import random
     tmp_list = list()
-    for _ in xrange(3):
+    for _ in range(3):
         rand_number = random.randint(0, 0x100000000)
         tmp_list.append("{0:x}".format(rand_number))
     return "-".join(tmp_list).upper()
@@ -96,7 +96,7 @@ class PyCardDAV(object):
         urllog = logging.getLogger('requests.packages.urllib3.connectionpool')
         urllog.setLevel(logging.CRITICAL)
 
-        split_url = urlparse.urlparse(resource)
+        split_url = urllib.parse.urlparse(resource)
         url_tuple = namedtuple('url', 'resource base path')
         self.url = url_tuple(resource,
                              split_url.scheme + '://' + split_url.netloc,
@@ -238,7 +238,7 @@ class PyCardDAV(object):
             response = requests.put(remotepath, data=card, headers=headers,
                                     **self._settings)
             if response.ok:
-                parsed_url = urlparse.urlparse(remotepath)
+                parsed_url = urllib.parse.urlparse(remotepath)
 
                 if 'etag' not in response.headers:
                     etag = ''
