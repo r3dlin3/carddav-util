@@ -22,7 +22,7 @@ On ubuntu:
 Usage
 -----
 
-ownCloud:
+### ownCloud:
 
     ./carddav-util.py   \
         --download      \
@@ -30,10 +30,11 @@ ownCloud:
         --file=test.vcf \
         --url=https://domain.com/owncloud/remote.php/carddav/addressbooks/username/contacts
 
-Baïkal:
+### Baïkal:
 
     ./carddav-util.py   \
         --download      \
+        --digest       \
         --user=username \
         --file=test.vcf \
         --url=https://domain.com/baikal/card.php/addressbooks/username/bookid
